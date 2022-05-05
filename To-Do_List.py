@@ -1,3 +1,4 @@
+from cgitb import text
 import tkinter
 from tkinter import ttk
 from tkinter import messagebox
@@ -7,11 +8,11 @@ import random
 window = tkinter.Tk()
 window.configure(bg="purple")
 window.title("To-Do List")
-window.geometry("400x400")
+window.geometry("275x275")
 
 
 #Sample Task List
-tasks =["music", "History Final", "Laundry"]
+tasks =[]
 
 #Functions
 def update_listbox():
@@ -23,7 +24,7 @@ def update_listbox():
 def clear_listbox():
     lbl_tasks.delete(0, "end")
 
-def add_task(event):
+def add_task():
     #get user input
     task = txt_input.get()
     #ensure user has entered a task
@@ -35,13 +36,13 @@ def add_task(event):
     #clear the textbox
     txt_input.delete(0, "end")
 
-def delete_task(event):
+def delete_task():
     #Get the txt of the selected item
     task = lbl_tasks.get("active")
     #confirm task is in tasks
     if task in tasks:
         ##returns a boolean
-        confirm = messagebox.askyesno("Confirm Deletion", "Are you sure you want to delete task:  **{}**?".format(task))
+        confirm = messagebox.askyesno("Confirm Deletion", "Are you sure you want to delete task: {}?".format(task))
         if confirm:
             tasks.remove(task)
     #update task list
@@ -51,18 +52,9 @@ def sort_list():
     tasks.sort()
     update_listbox()
 
-def sort_list_down():
-    tasks.sort()
-    tasks.reverse()
-    update_listbox()
 
-def rand_task():
-    ##chooses random task
-    task = random.choice(tasks)
-    ##update display label
-    lbl_display["text"] = task
 
-def delete_all():
+def delete_all(event):
     global tasks
     confirm = messagebox.askyesno("Confirm Deletion", "Are you sure you want to delete task?")
     if confirm:
@@ -75,8 +67,8 @@ def show_listbox():
         lbl_tasks.insert("end", task)
 
 
-window.bind('<Return>', add_task)#Allows the user to enter a task without hitting the add task button. Maps the enter key to the add task button
-window.bind('<Delete>', delete_task)
+#window.bind('<Return>', add_task)#Allows the user to enter a task without hitting the add task button. Maps the enter key to the add task button
+#window.bind('<Delete>', delete_all)
 
 ##Creating lbls and buttons
 lbl_title = tkinter.Label(window, text="To-Do List", bg="purple")
@@ -97,14 +89,8 @@ btn_delete_task.grid(row=1, column=3)
 btn_dAll_task = tkinter.Button(window, text="Delete All", fg="grey", bg="Black", command=delete_all)
 btn_dAll_task.grid(row=2, column=3)
 
-btn_sort_task = tkinter.Button(window, text="Sort Up", fg="grey", bg="Black", command=sort_list)
-btn_sort_task.grid(row= 10, column=0)
-
-btn_sort_task = tkinter.Button(window, text="Sort Down", fg="grey", bg="Black", command=sort_list_down)
-btn_sort_task.grid(row= 10, column=3)
-
-btn_random_task = tkinter.Button(window, text="Choose Random", fg="grey", bg="Black", command=rand_task)
-btn_random_task.grid(row=12, column=0)
+btn_sort_task = tkinter.Button(window, text="Sort", fg="grey", bg="Black", command=sort_list)
+btn_sort_task.grid(row= 2, column=0)
 
 lbl_tasks = tkinter.Listbox(window)
 lbl_tasks.grid(row=2, column=1, rowspan=5)
